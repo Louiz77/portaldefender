@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, ModalFooter } from 'react-bootstrap';
 import '../styles/InfoModal.css'
 
 const InfoModal = () => {
@@ -16,11 +16,11 @@ const InfoModal = () => {
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Bem-vindo ao Defender</Modal.Title>
+          <Modal.Title>Bem-vindo ao<img width={90} className='mt-4' src='VARIAÇÃO-05.png'></img></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            O <strong>Defender</strong> é uma solução completa de segurança e gerenciamento empresarial. 
+            O <strong>Defender 360</strong> é uma solução completa de segurança e gerenciamento empresarial. 
             Ele oferece proteção avançada contra vírus, malwares e outras ameaças, 
             além de integrar ferramentas para gerenciar dispositivos e dados de forma eficiente.
           </p>
@@ -36,6 +36,9 @@ const InfoModal = () => {
             suporte@itfacil.com.br
           </p>
         </Modal.Body>
+        <ModalFooter className="justify-content-center align-items-center">
+          <img width={60} src='defender 360_Prancheta 1.png'></img>
+        </ModalFooter>
       </Modal>
     </>
   );

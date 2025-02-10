@@ -1,0 +1,36 @@
+.portal-container {
+    background: linear-gradient(135deg, #2a2a72, #009ffd);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+  }
+  
+  .portal-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .portal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .portal-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #007bff;
+  }
+  
+  .portal-card .card-body {
+    background: #f8f9fa;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
