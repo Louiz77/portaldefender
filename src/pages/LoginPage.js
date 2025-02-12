@@ -23,13 +23,15 @@ const LoginPage = () => {
     }
   }, [navigate]);
 
-  const [jumpCloudWindow, setJumpCloudWindow] = useState(null); // Armazena a janela aberta
+  const [jumpCloudWindow, setJumpCloudWindow] = useState(null);
+  const [loginConfirmed, setLoginConfirmed] = useState(false);
 
   const handleLogin = () => {
     setLoading(true);
     setError("");
     setShowModal(true);
     setProgress(0);
+    setLoginConfirmed(false); // Reseta o estado de confirmação
   
     try {
       setStatus("Aguardando...");
@@ -39,7 +41,7 @@ const LoginPage = () => {
         "width=400,height=600,left=200,top=200"
       );
   
-      setJumpCloudWindow(newWindow); // Armazena a referência da janela
+      setJumpCloudWindow(newWindow);
   
       let progressValue = 0;
       const interval = setInterval(() => {
@@ -48,9 +50,8 @@ const LoginPage = () => {
   
         if (progressValue >= 100) {
           clearInterval(interval);
-          setShowModal(false);
+          setShowModal(true); // Mantém o modal aberto
           setLoading(false);
-          verifyUserLogin(inputUserName);
         }
       }, 1500);
     } catch (err) {
@@ -59,20 +60,33 @@ const LoginPage = () => {
       setLoading(false);
       setShowModal(false);
     }
-  };  
+  };
+  
+  // Função chamada quando o usuário confirma que terminou o login
+  const handleConfirmLogin = () => {
+    verifyUserLogin(inputUserName);
+    setLoginConfirmed(true); // Marca que o usuário confirmou o login
+  
+    if (jumpCloudWindow && !jumpCloudWindow.closed) {
+      jumpCloudWindow.close(); // Fecha a janela do JumpCloud
+    }
+  
+    navigate("/portal"); // Redireciona o usuário para o portal
+  };
+  
   
   const handleLogout = () => {
     // Apaga cache do usuário ao deslogar
     localStorage.removeItem("userName");
 
     // Abre a URL de logout
-    const logoutWindow = window.open("https://console.jumpcloud.com/userconsole/logout?autoGo=false", "_blank", "width=600,height=400");
+    const logoutWindow = window.open("https://console.jumpcloud.com/userconsole/logout?autoGo=false", "_blank", "width=1,height=2");
 
     if (logoutWindow) {
       setTimeout(() => {
         logoutWindow.close();
         navigate("/"); // Redireciona para a home
-      }, 5000);
+      }, 2500);
     }
   };
 
@@ -191,13 +205,20 @@ const LoginPage = () => {
         </Row>
       </Container>
       <animated.div style={modalAnimation}>
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Modal.Body className="text-center">
-            <h5>Prossiga com as suas credenciais...</h5>
-            <p>Você será redirecionado para inserir suas credenciais.</p>
-            <ProgressBar animated now={progress} label={`${progress}%`} />
-          </Modal.Body>
-        </Modal>
+      <Modal show={showModal} centered>
+        <Modal.Body className="text-center">
+          <h5>Prossiga com as suas credenciais...</h5>
+          <p>Você será redirecionado para inserir suas credenciais.</p>
+          <ProgressBar animated now={progress} label={`${progress}%`} />
+          
+          {progress >= 100 && !loginConfirmed && (
+            <div className="mt-3">
+              <AnimatedButton onClick={handleConfirmLogin}>Prosseguir para o Portal</AnimatedButton>
+              <p>Clique no botão acima após efetuar o login.</p>
+            </div>
+          )}
+        </Modal.Body>
+      </Modal>
       </animated.div>
     </LoginPageContainer>
   );

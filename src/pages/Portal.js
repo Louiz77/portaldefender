@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, ListGroup, Modal, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../styles/Portal.css";
-import { AnimatedButton } from "../styles/LoginPage.styles";
 
 const Portal = () => {
-  // eslint-disable-next-line
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  // eslint-disable-next-line
+  const [loginWindow, setLoginWindow] = useState(null);
 
   useEffect(() => {
     const storedUserName = localStorage.getItem("userName");
-    
     if (!storedUserName) {
-      navigate("/"); // Se não estiver autenticado, volta para o login
+      navigate("/");
     } else {
       setUserName(storedUserName);
     }
@@ -23,57 +23,107 @@ const Portal = () => {
     {
       name: "Defender 360",
       image: "defender 360_Prancheta 1.png",
-      url: "https://one.kaseya.com/connect/authorize?client_id=ob3kkTrn8K9GpjemjXSj&scope=openid+email&response_type=code&redirect_uri=https%3A%2F%2Fauth.datto.com%2Fk1sso%2Flogin&state=48cde255-da5b-4ade-91dd-843db9af5921",
+      url: "https://one.kaseya.com/connect/authorize?client_id=ob3kkTrn8K9GpjemjXSj&scope=openid+email&response_type=code&redirect_uri=https%3A%2F%2Fauth.datto.com%2Fk1sso%2Flogin",
     },
     {
       name: "Portal Defender 360",
       image: "logo512.png",
-      url: "https://one.kaseya.com/connect/authorize?client_id=ob3kkTrn8K9GpjemjXSj&scope=openid%20email&response_type=code&redirect_uri=https:%2F%2Fauth.datto.com%2Fk1sso%2FloginCallback&state=5a55b68f-2dc0-49e4-adf0-8b60214b83a7&login_hint=amhYVjRNVnp1Y3RNdnR4OVgrY3VjOS9ORlIrQzE3aTh4YkNHVmR3cWtrVk1jUmtxRy9uYzFaamNyQTZOYmt5dTQxWWhQWk1kWVBBd3VHWnhSL2VTcDU2UUpmV0NsQUxtUlZ1UkVZL3lXZEU9", // Coloque a URL correta aqui
+      url: "https://one.kaseya.com/connect/authorize?client_id=ob3kkTrn8K9GpjemjXSj&scope=openid%20email&response_type=code&redirect_uri=https:%2F%2Fauth.datto.com%2Fk1sso%2FloginCallback",
     },
     {
       name: "Portal EDR",
       image: "logo512.png",
-      url: "https://one.kaseya.com/connect/authorize?client_id=ZLAHdws3uGGb4MNvkxck&scope=profile%20openid&response_type=code&redirect_uri=https:%2F%2Fitfaci5363.infocyte.com%2Fk1callback&state=%7B%22operation%22:%22login%22,%22code%22:%22a731d947-ad6b-4bef-889d-9045a429574f%22%7D&login_hint=NDlDRXd0eVViaG5RdHFJVUhpWkVnSlB0TGFIQjJjRkJnVmlzdVZWUmlDd09GY0RPK3dRNWVXQ1Vqc28zdTdvL2FtVzhrWWd5WW1KNlpMMDVCM0VKM1MwN2NldzRFUk4vUlZ1UkVZL3lXZEU9", // Coloque a URL correta aqui
+      url: "https://one.kaseya.com/connect/authorize?client_id=ZLAHdws3uGGb4MNvkxck&scope=profile%20openid&response_type=code&redirect_uri=https:%2F%2Fitfaci5363.infocyte.com%2Fk1callback",
     },
   ];
 
+  const handlePlatformClick = (url) => {
+    // Abre a nova aba de forma oculta (pequena)
+    const newWindow = window.open(url, "_blank", "width=1,height=1,left=9999,top=9999");
+  
+    // Mantém o foco na aba principal
+    setTimeout(() => {
+      window.focus();
+    }, 100);
+  
+    // Exibe um modal para o usuário enquanto aguarda o redirecionamento
+    setShowModal(true);
+  
+    // Após 10 segundos, fecha a nova aba e redireciona a aba principal para a URL desejada
+    setTimeout(() => {
+      if (newWindow) {
+        newWindow.close();
+      }
+      setShowModal(false);
+      window.location.href = "https://vidal.rmm.datto.com/dashboard"; // Redireciona para a URL desejada
+    }, 15000);
+  };
+  
   const handleLogout = () => {
-    // Apaga cache do usuário ao deslogar
     localStorage.removeItem("userName");
-
-    // Abre a URL de logout
-    const logoutWindow = window.open("https://console.jumpcloud.com/userconsole/logout?autoGo=false", "_blank", "width=600,height=400");
-
+    const logoutWindow = window.open(
+      "https://console.jumpcloud.com/userconsole/logout?autoGo=false",
+      "_blank",
+      "width=1,height=2"
+    );
     if (logoutWindow) {
       setTimeout(() => {
         logoutWindow.close();
-        navigate("/"); // Redireciona para a home
-      }, 5000);
+        navigate("/");
+      }, 2500);
     }
   };
-  
+
   return (
     <div className="portal-container">
-        <Container fluid>
-        <h1 className="text-center mb-4">Bem-vindo ao Portal, {userName}!</h1>
-        <h2 className="text-center mb-4">Selecione a plataforma desejada</h2>
-        <Row className="justify-content-center">
+      <Row>
+        <Col md={2} className="sidebar">
+          <div className="profile-section text-center">
+            <img src="profile-user.png" alt="Perfil" className="profile-image" />
+            <h4>{userName}</h4>
+          </div>
+          <ListGroup className="menu-list">
             {platforms.map((platform, index) => (
-            <Col md={2} key={index} className="mb-4">
-                <Card
-                className="portal-card"
-                onClick={() => (window.location.href = platform.url)}
-                >
-                <Card.Img variant="top" src={platform.image} />
-                <Card.Body>
-                    <Card.Title>{platform.name}</Card.Title>
-                </Card.Body>
-                </Card>
-                <AnimatedButton onClick={handleLogout}>Logout</AnimatedButton>
-            </Col>
+              <ListGroup.Item key={index} action onClick={() => handlePlatformClick(platform.url)} className="menu-item">
+                {platform.name}
+              </ListGroup.Item>
             ))}
-        </Row>
-        </Container>
+          </ListGroup>
+          <div className="menu-footer">
+            <Button variant="secondary" className="menu-button">Perfil</Button>
+            <Button variant="danger" className="menu-button" onClick={handleLogout}>Logout</Button>
+          </div>
+        </Col>
+        <Col md={9} className="content-section">
+          <Container>
+            <Row className="platform-row">
+              {platforms.map((platform, index) => (
+                <Col md={4} key={index}>
+                  <Card className="portal-card" onClick={() => handlePlatformClick(platform.url)}>
+                    <Card.Img variant="top" src={platform.image} className="platform-image" />
+                    <Card.Body>
+                      <Card.Title className="text-center">{platform.name}</Card.Title>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+            <div className="welcome-section text-center">
+              <h2>Bem-vindo(a),<strong> {userName}!</strong></h2>
+              <img src="4046423.jpg" alt="Bem-vindo" className="welcome-image" />
+            </div>
+          </Container>
+        </Col>
+      </Row>
+
+      {/* Modal de Login */}
+      <Modal show={showModal} centered>
+        <Modal.Body className="text-center">
+          <h4>Realizando login...</h4>
+          <Spinner animation="border" variant="primary" className="mt-3" />
+          <p className="mt-3">Aguarde enquanto acessamos a plataforma.</p>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
