@@ -1,38 +1,84 @@
 .login-page {
-    background: linear-gradient(135deg, #2a2a72, #009ffd);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-  }
-  
+  background: linear-gradient(135deg, #2a2a72, #009ffd);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 20px; /* Evita que o conteúdo encoste nas bordas em telas menores */
+}
+
+/* Caixa de login */
+.login-box {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+  width: 100%;
+  max-width: 600px; /* Mantém um tamanho confortável em telas grandes */
+}
+
+/* Título */
+.login-box h2 {
+  font-weight: bold;
+  color: #2a2a72;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Botões */
+.animated-btn {
+  width: 100%;
+  background: #009ffd;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.animated-btn:hover {
+  background: #2a2a72;
+  transform: scale(1.05);
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
   .login-box {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    color: #333;
+      padding: 20px; /* Reduz o padding para caber melhor na tela */
+      max-width: 90%; /* Usa quase toda a largura disponível */
   }
-  
+
   .login-box h2 {
-    font-weight: bold;
-    color: #2a2a72;
+      font-size: 20px; /* Reduz o tamanho do título */
   }
-  
+
   .animated-btn {
-    width: 100%;
-    background: #009ffd;
-    border: none;
-    color: #fff;
-    padding: 12px 20px;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+      font-size: 16px;
+      padding: 10px;
   }
   
-  .animated-btn:hover {
-    background: #2a2a72;
-    transform: scale(1.05);
-  }  
+  .login-page {
+      padding: 10px;
+  }
+}
+
+/* Ajuste para telas muito pequenas (celulares pequenos) */
+@media (max-width: 480px) {
+  .login-box {
+      padding: 15px;
+      max-width: 100%;
+  }
+
+  .login-box h2 {
+      font-size: 18px;
+  }
+
+  .animated-btn {
+      font-size: 14px;
+      padding: 8px;
+  }
+}
