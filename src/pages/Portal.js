@@ -81,6 +81,10 @@ const Portal = () => {
           <div className="profile-section text-center">
             <img src="profile-user.png" alt="Perfil" className="profile-image" />
             <h4>{userName}</h4>
+            <div className="sidebar-footer">
+              <Button variant="secondary" className="m-2">Perfil</Button>
+              <Button variant="danger" className="m-2" onClick={handleLogout}>Logout</Button>
+            </div>
           </div>
           <ListGroup className="menu-list">
             {platforms.map((platform, index) => (
@@ -89,10 +93,6 @@ const Portal = () => {
               </ListGroup.Item>
             ))}
           </ListGroup>
-          <div className="menu-footer">
-            <Button variant="secondary" className="menu-button">Perfil</Button>
-            <Button variant="danger" className="menu-button" onClick={handleLogout}>Logout</Button>
-          </div>
         </Col>
         <Col md={9} className="content-section">
           <Container>
